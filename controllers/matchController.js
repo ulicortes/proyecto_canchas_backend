@@ -1,30 +1,24 @@
-import { matchList, matchDetail, matchCreate } from "../services/matchService.js";
+import { oneMatch, createNewMatch, editOneMatch, allMatches } from "../services/matchService.js";
 
 export const getMatches = async (req, res) => {
-    const matches = await matchList();
-    if (matches.name == "Error") {
-        res.status(404).send(matches.message)
-        return;
-    }
-    res.status(200).send(matches);
+    const matches = await allMatches();
+    return res.status(matches.status).send(matches.message);
 }
 
 export const getMatch = async (req, res) => {
     const { id } = req.params;
-    const matches = await matchDetail(id);
-    if (matches.name == "Error") {
-        res.status(404).send(matches.message);
-        return;
-    }
-    res.status(200).send(matches);
+    const match = await oneMatch(id);
+    return res.status(match.status).send(match.message);
 }
 
 export const newMatch = async (req, res) => {
-    const match = req.body;
-    const createMatch = await matchCreate(match);
-    if (createMatch.name == "Error") {
-        res.status(404).send(createMatch.message);
-        return;
-    }
-    res.status(200).send(createMatch);
+    const match = await createNewMatch(req.body);
+    return res.status(match.status).send(match.message);
+}
+
+export const editMatch = async (req, res) => {
+    const { id } = req.params;
+    const { lista } = req.body;
+    const match = await editOneMatch(id, lista);
+    return res.status(match.status).send(match.message);
 }
