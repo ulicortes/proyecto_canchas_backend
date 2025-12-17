@@ -9,7 +9,7 @@ app.disable('x-powered-by');
 app.use(cors());
 app.use(express.json()); 
 
-app.use('/matches', matches);
+app.use('/matches', auth, matches);
 app.use('/users', users);
 // app.use('/matches', auth, (req, res) => {
 //   res.send('Hola desde /matches con auth');

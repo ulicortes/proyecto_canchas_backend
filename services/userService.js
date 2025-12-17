@@ -9,8 +9,8 @@ export const registerUser = async (body) => {
         return {"status": 500, "message": "Error con la contraseña"};
     }
     let user = {
-        username: body.username,
-        mail: body.mail,
+        username: body.user,
+        mail: body.email,
         password: hashedPassword
     };
     const newUser = await createUser(user);
@@ -21,16 +21,17 @@ export const registerUser = async (body) => {
 }
 
 export const getToken = async (user) => {
-    let hashedpassword = await getUser(user.mail);
-    if (hashedpassword.name === "Error") {
+    let rsp = await getUser(user.mail);
+    if (rsp.name === "Error") {
         return { "status": 404, "message": "Usuario no encontrado" };
     }
+    let hashedPassword = rsp[0].password;
 
-    const passwordOk = await bcrypt.compare(user.password, hashedpassword);
+    const passwordOk = await bcrypt.compare(user.password, hashedPassword);
     if (!passwordOk) {
         return { "status": 401, "message": "Contraseña incorrecta" };
     }
 
-    const token = jwt.sign({ usuario: user.mail }, process.env.SECRET_KEY, { expiresIn: "1800s" });
-    return { "status": 200, "message": token };
+    const token = jwt.sign({ usuario: rsp[0].username }, process.env.SECRET_KEY, { expiresIn: "1800s" });
+    return { "status": 200, "message": {"token":token, "user": rsp[0].username} };
 }

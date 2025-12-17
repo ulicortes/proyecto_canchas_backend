@@ -20,8 +20,8 @@ export const createUser = async (body) => {
 export const getUser = async (mail) => {
     let client = await pool.connect();
     try {
-        let { rows } = await client.query("select password from usuario where email=$1", [mail]);
-        return rows[0].password;
+        let { rows } = await client.query("select username, password from usuario where email=$1", [mail]);
+        return rows;
     } catch (error) {
         return new Error("Algo salio mal :(");
     }

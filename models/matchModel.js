@@ -25,6 +25,7 @@ export const matchDetail = async (id) => {
         if (new Date(rows[0].dia) < Date.now()) {
             throw new Error('Este turno ya pasò!!');
         }
+        console.log(rows[0]);
         return rows[0];
     } catch (error) {
         await client.query('rollback')

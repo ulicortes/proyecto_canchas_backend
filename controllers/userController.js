@@ -7,5 +7,6 @@ export const register = async (req, res) => {
 
 export const loginUser = async (req, res) => {
     const response = await getToken(req.body);
-    return res.status(response.status).send(response.message);
+    const jsonrsp = JSON.stringify(response)
+    return res.status(response.status).send(jsonrsp);
 }

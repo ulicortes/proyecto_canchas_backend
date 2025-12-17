@@ -5,7 +5,7 @@ export const allMatches = async () => {
     if( matches.name == "Error") {
         return { "status": 404, "message": matches.message };
     }
-    const rsp = matches.filter(m => m.dia >= new Date().toISOString());
+    const rsp = matches.filter(m => m.dia >= new Date().toISOString().split('T')[0]);
     return { "status": 200, "message": rsp };
 }
 
